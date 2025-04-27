@@ -25,6 +25,11 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.get("/products", async (req, res) => {
+  const products = await Product.find({});
+  res.render("products/index", { products: products });
+});
+
 app.listen(port, () => {
   console.log(`Shop app listening on http://localhost:${port}`);
 });
