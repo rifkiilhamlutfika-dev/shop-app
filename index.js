@@ -1,4 +1,5 @@
 const path = require("path");
+const methodOverride = require("method-override");
 const express = require("express");
 const mongoose = require("mongoose");
 const port = 8008 || 3000;
@@ -21,6 +22,7 @@ mongoose
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -48,6 +50,13 @@ app.get("/product/:id/edit", async (req, res) => {
 app.post("/product", async (req, res) => {
   const product = new Product(req.body);
   await product.save();
+  res.redirect(`/product/${product._id}`);
+});
+
+app.put("/product/:id", async (req, res) => {
+  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    runValidator: true,
+  });
   res.redirect(`/product/${product._id}`);
 });
 
