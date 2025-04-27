@@ -24,8 +24,9 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get("/", async (req, res) => {
+  const products = await Product.find();
+  res.render("products/index", { products: products, category: "All" });
 });
 
 app.get("/products", async (req, res) => {
@@ -33,6 +34,7 @@ app.get("/products", async (req, res) => {
   let products = [];
   if (category) {
     products = await Product.find({ category: category });
+    if (products.length == 0) res.render("not_found");
     res.render("products/index", { products: products, category });
   } else {
     products = await Product.find({});
@@ -50,8 +52,15 @@ app.get("/product/:id", async (req, res) => {
 });
 
 app.get("/product/:id/edit", async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  res.render("products/edit", { product: product });
+  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.render("not_found");
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) res.render("not_found");
+    else res.render("products/edit", { product: product });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("/product", async (req, res) => {
@@ -70,6 +79,10 @@ app.put("/product/:id", async (req, res) => {
 app.delete("/product/:id", async (req, res) => {
   await Product.findByIdAndDelete(req.params.id);
   res.redirect("/products");
+});
+
+app.use((req, res) => {
+  res.render("not_found");
 });
 
 app.listen(port, () => {
