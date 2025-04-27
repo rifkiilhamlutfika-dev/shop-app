@@ -30,6 +30,10 @@ app.get("/products", async (req, res) => {
   res.render("products/index", { products: products });
 });
 
+app.get("/product/create", (req, res) => {
+  res.render("products/create");
+});
+
 app.get("/product/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   res.render("products/show", { product: product });

@@ -5,7 +5,10 @@ const productSchema = mongoose.Schema({
   brand: { type: String, required: true },
   price: { type: Number, required: true },
   color: { type: String, required: true },
-  size: { type: String, enum: ["S", "M", "L", "XL"] },
+  category: {
+    type: String,
+    enum: ["Clothes", "Pants", "Shoe", "Hat", "Accessories", "Jacket"],
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);
