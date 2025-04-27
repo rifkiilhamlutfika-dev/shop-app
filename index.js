@@ -60,6 +60,11 @@ app.put("/product/:id", async (req, res) => {
   res.redirect(`/product/${product._id}`);
 });
 
+app.delete("/product/:id", async (req, res) => {
+  await Product.findByIdAndDelete(req.params.id);
+  res.redirect("/products");
+});
+
 app.listen(port, () => {
   console.log(`Shop app listening on http://localhost:${port}`);
 });
