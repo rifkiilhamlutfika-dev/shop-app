@@ -5,6 +5,9 @@ const port = 8008 || 3000;
 
 const app = express();
 
+/* Models */
+const Product = require("./models/product");
+
 // connect to mongodb --
 mongoose
   .connect("mongodb://127.0.0.1/shop_db")
