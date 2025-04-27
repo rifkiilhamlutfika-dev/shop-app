@@ -40,6 +40,11 @@ app.get("/product/:id", async (req, res) => {
   res.render("products/show", { product: product });
 });
 
+app.get("/product/:id/edit", async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  res.render("products/edit", { product: product });
+});
+
 app.post("/product", async (req, res) => {
   const product = new Product(req.body);
   await product.save();
