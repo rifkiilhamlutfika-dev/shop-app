@@ -30,6 +30,11 @@ app.get("/products", async (req, res) => {
   res.render("products/index", { products: products });
 });
 
+app.get("/product/:id", async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  res.render("products/show", { product: product });
+});
+
 app.listen(port, () => {
   console.log(`Shop app listening on http://localhost:${port}`);
 });
